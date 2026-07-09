@@ -35,7 +35,7 @@ Files used:
 
 ## Key SQL Analysis
 - Loan status summary
-- Risk grade default rate
+- Default Rate by Risk Grade
 - Loan purpose risk analysis
 - Debt-to-income grouping
 - Borrower and loan risk profile
@@ -57,5 +57,13 @@ Files used:
 ## Repository Structure
 Add your folder structure here.
 
-## Screenshots
-Add your main screenshots here.
+## Key Visuals
+
+### Loan Status Summary
+![Loan Status Summary](screenshots/loan_status_summary.png)
+
+### Default Rate by Risk Grade
+![Default Rate by Risk Grade](screenshots/default_rate_by_grade.png)
+
+### Borrower Distribution by DTI Group
+![Borrower Distribution by DTI Group](screenshots/dti_group_distribution.png)

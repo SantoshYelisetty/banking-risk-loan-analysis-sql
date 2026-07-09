@@ -1,6 +1,6 @@
-grade_band,total_loans,charged_off_loans,charged_off_rate_percentage
-A,32241,0,0.0
-B,24846,0,0.0
-C,19429,0,0.0
-D,12918,0,0.0
-E,10566,0,0.0
+grade_band,total_loans,default_loans,default_rate_percentage
+A,32241,829,2.57
+B,24846,1101,4.43
+C,19429,1904,9.8
+D,12918,2667,20.65
+E,10566,3503,33.15

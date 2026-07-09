@@ -37,11 +37,11 @@ queries = {
         SELECT
             LEFT(grade, 1) AS grade_band,
             COUNT(*) AS total_loans,
-            SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) AS charged_off_loans,
+            SUM(CASE WHEN loan_status = 'Default' THEN 1 ELSE 0 END) AS default_loans,
             ROUND(
-                100.0 * SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) / COUNT(*),
+                100.0 * SUM(CASE WHEN loan_status = 'Default' THEN 1 ELSE 0 END) / COUNT(*),
                 2
-            ) AS charged_off_rate_percentage
+            ) AS default_rate_percentage
         FROM loans
         GROUP BY LEFT(grade, 1)
         ORDER BY grade_band;
@@ -73,27 +73,43 @@ fig1 = px.bar(
     y="total_loans",
     text="total_loans",
     title="Loan Status Summary",
-    labels={"loan_status": "Loan Status", "total_loans": "Total Loans"}
+    labels={
+        "loan_status": "Loan Status",
+        "total_loans": "Total Loans"
+    }
 )
-fig1.update_layout(template="plotly_white")
+fig1.update_traces(textposition="outside")
+fig1.update_layout(
+    template="plotly_white",
+    xaxis_title="Loan Status",
+    yaxis_title="Total Loans"
+)
 fig1.write_image(SCREENSHOT_DIR / "loan_status_summary.png", scale=2)
 fig1.write_html(OUTPUT_DIR / "loan_status_summary.html")
 
-# Visual 2: Charged-off rate by grade band
+# Visual 2: Default rate by grade band
 fig2 = px.bar(
     dataframes["grade_default_rate"],
     x="grade_band",
-    y="charged_off_rate_percentage",
-    text="charged_off_rate_percentage",
-    title="Charged-Off Rate by Risk Grade",
+    y="default_rate_percentage",
+    text="default_rate_percentage",
+    title="Default Rate by Risk Grade",
     labels={
         "grade_band": "Risk Grade",
-        "charged_off_rate_percentage": "Charged-Off Rate (%)"
+        "default_rate_percentage": "Default Rate (%)"
     }
 )
-fig2.update_layout(template="plotly_white")
-fig2.write_image(SCREENSHOT_DIR / "charged_off_rate_by_grade.png", scale=2)
-fig2.write_html(OUTPUT_DIR / "charged_off_rate_by_grade.html")
+fig2.update_traces(
+    texttemplate="%{text:.2f}%",
+    textposition="outside"
+)
+fig2.update_layout(
+    template="plotly_white",
+    xaxis_title="Risk Grade",
+    yaxis_title="Default Rate (%)"
+)
+fig2.write_image(SCREENSHOT_DIR / "default_rate_by_grade.png", scale=2)
+fig2.write_html(OUTPUT_DIR / "default_rate_by_grade.html")
 
 # Visual 3: DTI group summary
 fig3 = px.pie(
@@ -102,6 +118,7 @@ fig3 = px.pie(
     values="borrower_count",
     title="Borrower Distribution by DTI Group"
 )
+fig3.update_traces(textinfo="percent+label")
 fig3.update_layout(template="plotly_white")
 fig3.write_image(SCREENSHOT_DIR / "dti_group_distribution.png", scale=2)
 fig3.write_html(OUTPUT_DIR / "dti_group_distribution.html")
